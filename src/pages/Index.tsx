@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Utensils, Users, Dumbbell, Heart, Target, TrendingUp, Calendar, Camera, Sparkles } from 'lucide-react';
+import { Utensils, Users, Dumbbell, Heart, Target, TrendingUp, Calendar, Camera, Sparkles, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import NutritionModule from '@/components/modules/NutritionModule';
@@ -8,8 +8,9 @@ import BodyAssessmentModule from '@/components/modules/BodyAssessmentModule';
 import WorkoutModule from '@/components/modules/WorkoutModule';
 import ProgressModule from '@/components/modules/ProgressModule';
 import HabitsModule from '@/components/modules/HabitsModule';
+import StretchingModule from '@/components/modules/StretchingModule';
 
-type ModuleType = 'home' | 'nutrition' | 'body-assessment' | 'workout' | 'progress' | 'habits';
+type ModuleType = 'home' | 'nutrition' | 'body-assessment' | 'workout' | 'progress' | 'habits' | 'stretching';
 
 const Index = () => {
   const [activeModule, setActiveModule] = useState<ModuleType>('home');
@@ -40,6 +41,14 @@ const Index = () => {
       bgColor: 'from-purple-50 to-violet-50'
     },
     {
+      id: 'stretching' as ModuleType,
+      title: 'Alongamentos & Alívio',
+      description: 'Exercícios para aliviar dores comuns e tensões do dia a dia',
+      icon: <Zap className="w-8 h-8" />,
+      color: 'from-teal-500 to-cyan-500',
+      bgColor: 'from-teal-50 to-cyan-50'
+    },
+    {
       id: 'habits' as ModuleType,
       title: 'Hábitos Saudáveis',
       description: 'Planos holísticos para sono, foco, estresse e bem-estar',
@@ -65,6 +74,8 @@ const Index = () => {
         return <BodyAssessmentModule onBack={() => setActiveModule('home')} />;
       case 'workout':
         return <WorkoutModule onBack={() => setActiveModule('home')} />;
+      case 'stretching':
+        return <StretchingModule onBack={() => setActiveModule('home')} />;
       case 'habits':
         return <HabitsModule onBack={() => setActiveModule('home')} />;
       case 'progress':
