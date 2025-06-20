@@ -1,48 +1,87 @@
 
 import { useState } from 'react';
-import { Upload, Camera, Leaf, TrendingUp, Eye, Utensils } from 'lucide-react';
+import { Utensils, Users, Dumbbell, Heart, Target, TrendingUp, Calendar, Camera } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import ImageUpload from '@/components/ImageUpload';
-import EvaluationCard from '@/components/EvaluationCard';
-import ResultsDisplay from '@/components/ResultsDisplay';
+import NutritionModule from '@/components/modules/NutritionModule';
+import BodyAssessmentModule from '@/components/modules/BodyAssessmentModule';
+import WorkoutModule from '@/components/modules/WorkoutModule';
+import ProgressModule from '@/components/modules/ProgressModule';
+
+type ModuleType = 'home' | 'nutrition' | 'body-assessment' | 'workout' | 'progress';
 
 const Index = () => {
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const [evaluation, setEvaluation] = useState({
-    vegetables: 0,
-    proteins: 0,
-    healthiness: 0,
-    analysis: '',
-    tip: ''
-  });
-  const [showResults, setShowResults] = useState(false);
+  const [activeModule, setActiveModule] = useState<ModuleType>('home');
 
-  const handleImageUpload = (imageUrl: string) => {
-    setUploadedImage(imageUrl);
-    setShowResults(false);
-  };
+  const modules = [
+    {
+      id: 'nutrition' as ModuleType,
+      title: 'Nutricionista IA',
+      description: 'Análise nutricional de pratos, calorias e dicas alimentares',
+      icon: <Utensils className="w-8 h-8" />,
+      color: 'from-green-500 to-emerald-500',
+      bgColor: 'from-green-50 to-emerald-50'
+    },
+    {
+      id: 'body-assessment' as ModuleType,
+      title: 'Avaliação Corporal',
+      description: 'Análise visual de composição corporal e postura',
+      icon: <Users className="w-8 h-8" />,
+      color: 'from-blue-500 to-cyan-500',
+      bgColor: 'from-blue-50 to-cyan-50'
+    },
+    {
+      id: 'workout' as ModuleType,
+      title: 'Planejador de Treinos',
+      description: 'Criação de treinos personalizados e exercícios',
+      icon: <Dumbbell className="w-8 h-8" />,
+      color: 'from-purple-500 to-violet-500',
+      bgColor: 'from-purple-50 to-violet-50'
+    },
+    {
+      id: 'progress' as ModuleType,
+      title: 'Acompanhamento',
+      description: 'Monitoramento de progresso e métricas fitness',
+      icon: <TrendingUp className="w-8 h-8" />,
+      color: 'from-orange-500 to-red-500',
+      bgColor: 'from-orange-50 to-red-50'
+    }
+  ];
 
-  const handleEvaluationSubmit = () => {
-    if (evaluation.vegetables && evaluation.proteins && evaluation.healthiness && evaluation.analysis) {
-      setShowResults(true);
+  const renderActiveModule = () => {
+    switch (activeModule) {
+      case 'nutrition':
+        return <NutritionModule onBack={() => setActiveModule('home')} />;
+      case 'body-assessment':
+        return <BodyAssessmentModule onBack={() => setActiveModule('home')} />;
+      case 'workout':
+        return <WorkoutModule onBack={() => setActiveModule('home')} />;
+      case 'progress':
+        return <ProgressModule onBack={() => setActiveModule('home')} />;
+      default:
+        return null;
     }
   };
 
+  if (activeModule !== 'home') {
+    return renderActiveModule();
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-green-100 sticky top-0 z-50">
+      <header className="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl flex items-center justify-center">
-              <Utensils className="w-6 h-6 text-white" />
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+              <Heart className="w-7 h-7 text-white" />
             </div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-              Nutricionista IA
-            </h1>
+            <div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                FitAI Ecosystem
+              </h1>
+              <p className="text-sm text-slate-600">Seu ecossistema fitness completo</p>
+            </div>
           </div>
         </div>
       </header>
@@ -50,122 +89,110 @@ const Index = () => {
       <main className="container mx-auto px-6 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">
-            Análise Nutricional <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Inteligente</span>
+          <h2 className="text-5xl font-bold text-slate-800 mb-6">
+            Seu <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Ecossistema Fitness</span> Completo
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Envie uma foto do seu prato e receba uma avaliação nutricional completa com classificação de saúde e estimativa de calorias
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            Uma plataforma holística que combina nutrição inteligente, avaliação corporal, planejamento de treinos 
+            e acompanhamento de progresso - tudo em um só lugar para sua jornada fitness.
           </p>
         </div>
 
-        <div className="max-w-6xl mx-auto">
-          {!uploadedImage ? (
-            <ImageUpload onImageUpload={handleImageUpload} />
-          ) : (
-            <div className="grid lg:grid-cols-2 gap-8">
-              {/* Image Display */}
-              <Card className="p-6 bg-white/70 backdrop-blur-sm border-0 shadow-xl">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Camera className="w-5 h-5 text-green-600" />
-                    <h3 className="text-lg font-semibold text-gray-800">Prato para Análise</h3>
+        {/* Quick Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+          <Card className="p-4 text-center bg-white/70 backdrop-blur-sm border-0 shadow-lg">
+            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-2">
+              <Camera className="w-6 h-6 text-white" />
+            </div>
+            <p className="text-2xl font-bold text-slate-800">AI</p>
+            <p className="text-sm text-slate-600">Análise Visual</p>
+          </Card>
+          <Card className="p-4 text-center bg-white/70 backdrop-blur-sm border-0 shadow-lg">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-2">
+              <Target className="w-6 h-6 text-white" />
+            </div>
+            <p className="text-2xl font-bold text-slate-800">360°</p>
+            <p className="text-sm text-slate-600">Abordagem Holística</p>
+          </Card>
+          <Card className="p-4 text-center bg-white/70 backdrop-blur-sm border-0 shadow-lg">
+            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-violet-500 rounded-full flex items-center justify-center mx-auto mb-2">
+              <Dumbbell className="w-6 h-6 text-white" />
+            </div>
+            <p className="text-2xl font-bold text-slate-800">Personal</p>
+            <p className="text-sm text-slate-600">Treinos Customizados</p>
+          </Card>
+          <Card className="p-4 text-center bg-white/70 backdrop-blur-sm border-0 shadow-lg">
+            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-2">
+              <Calendar className="w-6 h-6 text-white" />
+            </div>
+            <p className="text-2xl font-bold text-slate-800">24/7</p>
+            <p className="text-sm text-slate-600">Acompanhamento</p>
+          </Card>
+        </div>
+
+        {/* Modules Grid */}
+        <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          {modules.map((module) => (
+            <Card 
+              key={module.id}
+              className={`p-8 bg-gradient-to-br ${module.bgColor} border-0 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer group hover:scale-105`}
+              onClick={() => setActiveModule(module.id)}
+            >
+              <div className="space-y-6">
+                <div className="flex items-center gap-4">
+                  <div className={`w-16 h-16 bg-gradient-to-br ${module.color} rounded-2xl flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300`}>
+                    {module.icon}
                   </div>
-                  <div className="relative rounded-xl overflow-hidden">
-                    <img 
-                      src={uploadedImage} 
-                      alt="Prato para avaliação nutricional"
-                      className="w-full h-auto max-h-96 object-cover"
-                    />
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-bold text-slate-800 mb-2">
+                      {module.title}
+                    </h3>
+                    <p className="text-slate-600 leading-relaxed">
+                      {module.description}
+                    </p>
                   </div>
+                </div>
+                
+                <div className="pt-4">
                   <Button 
-                    variant="outline" 
-                    onClick={() => setUploadedImage(null)}
-                    className="w-full border-green-200 text-green-600 hover:bg-green-50"
+                    className={`w-full bg-gradient-to-r ${module.color} hover:shadow-lg text-white font-medium py-3 text-lg group-hover:shadow-xl transition-all duration-300`}
                   >
-                    <Upload className="w-4 h-4 mr-2" />
-                    Enviar Nova Foto
+                    Acessar Módulo
                   </Button>
                 </div>
-              </Card>
+              </div>
+            </Card>
+          ))}
+        </div>
 
-              {/* Evaluation Form */}
-              <Card className="p-6 bg-white/70 backdrop-blur-sm border-0 shadow-xl">
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3 mb-6">
-                    <Eye className="w-5 h-5 text-emerald-600" />
-                    <h3 className="text-lg font-semibold text-gray-800">Avaliação Nutricional</h3>
-                  </div>
-
-                  <EvaluationCard
-                    title="Presença de Vegetais"
-                    description="Quantidade e variedade de vegetais no prato"
-                    value={evaluation.vegetables}
-                    onChange={(value) => setEvaluation(prev => ({ ...prev, vegetables: value }))}
-                    icon={<Leaf className="w-5 h-5" />}
-                    color="green"
-                  />
-
-                  <EvaluationCard
-                    title="Qualidade das Proteínas"
-                    description="Presença e preparo das proteínas"
-                    value={evaluation.proteins}
-                    onChange={(value) => setEvaluation(prev => ({ ...prev, proteins: value }))}
-                    icon={<TrendingUp className="w-5 h-5" />}
-                    color="blue"
-                  />
-
-                  <EvaluationCard
-                    title="Nível de Saudabilidade"
-                    description="Avaliação geral do prato (frituras, processados)"
-                    value={evaluation.healthiness}
-                    onChange={(value) => setEvaluation(prev => ({ ...prev, healthiness: value }))}
-                    icon={<Utensils className="w-5 h-5" />}
-                    color="emerald"
-                  />
-
-                  <div className="space-y-3">
-                    <Label htmlFor="analysis" className="text-sm font-medium text-gray-700">
-                      Análise Detalhada do Prato
-                    </Label>
-                    <Textarea
-                      id="analysis"
-                      placeholder="Descreva os alimentos presentes, métodos de preparo, quantidade e composição nutricional observada..."
-                      value={evaluation.analysis}
-                      onChange={(e) => setEvaluation(prev => ({ ...prev, analysis: e.target.value }))}
-                      className="min-h-24 border-gray-200 focus:border-green-400 focus:ring-green-400"
-                    />
-                  </div>
-
-                  <div className="space-y-3">
-                    <Label htmlFor="tip" className="text-sm font-medium text-gray-700">
-                      Dica de Melhoria
-                    </Label>
-                    <Textarea
-                      id="tip"
-                      placeholder="Sugestão para tornar a refeição mais saudável..."
-                      value={evaluation.tip}
-                      onChange={(e) => setEvaluation(prev => ({ ...prev, tip: e.target.value }))}
-                      className="min-h-20 border-gray-200 focus:border-green-400 focus:ring-green-400"
-                    />
-                  </div>
-
-                  <Button 
-                    onClick={handleEvaluationSubmit}
-                    className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-medium py-3"
-                    disabled={!evaluation.vegetables || !evaluation.proteins || !evaluation.healthiness || !evaluation.analysis}
-                  >
-                    Gerar Análise Nutricional
-                  </Button>
-                </div>
-              </Card>
+        {/* Features Section */}
+        <div className="mt-16 text-center">
+          <h3 className="text-3xl font-bold text-slate-800 mb-8">
+            Recursos Integrados
+          </h3>
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="p-6 bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Camera className="w-6 h-6 text-white" />
+              </div>
+              <h4 className="text-lg font-semibold text-slate-800 mb-2">Análise por IA</h4>
+              <p className="text-slate-600 text-sm">Tecnologia avançada para análise visual de alimentos e composição corporal</p>
             </div>
-          )}
-
-          {showResults && (
-            <div className="mt-8">
-              <ResultsDisplay evaluation={evaluation} />
+            <div className="p-6 bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Target className="w-6 h-6 text-white" />
+              </div>
+              <h4 className="text-lg font-semibold text-slate-800 mb-2">Personalização Total</h4>
+              <p className="text-slate-600 text-sm">Planos adaptados aos seus objetivos, limitações e preferências específicas</p>
             </div>
-          )}
+            <div className="p-6 bg-white/70 backdrop-blur-sm rounded-xl border border-slate-200">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="w-6 h-6 text-white" />
+              </div>
+              <h4 className="text-lg font-semibold text-slate-800 mb-2">Progresso Contínuo</h4>
+              <p className="text-slate-600 text-sm">Acompanhamento detalhado da sua evolução em todas as áreas do fitness</p>
+            </div>
+          </div>
         </div>
       </main>
     </div>
