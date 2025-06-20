@@ -60,8 +60,8 @@ const ImageUpload = ({ onImageUpload }: ImageUploadProps) => {
         className={`
           p-12 text-center transition-all duration-300 cursor-pointer
           ${isDragOver 
-            ? 'bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-dashed border-blue-400' 
-            : 'bg-white/70 backdrop-blur-sm border-2 border-dashed border-gray-300 hover:border-blue-400 hover:bg-gradient-to-br hover:from-blue-50 hover:to-indigo-50'
+            ? 'bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-dashed border-green-400' 
+            : 'bg-white/70 backdrop-blur-sm border-2 border-dashed border-gray-300 hover:border-green-400 hover:bg-gradient-to-br hover:from-green-50 hover:to-emerald-50'
           }
         `}
         onDrop={handleDrop}
@@ -80,24 +80,24 @@ const ImageUpload = ({ onImageUpload }: ImageUploadProps) => {
         <div className="space-y-6">
           <div className={`
             w-20 h-20 mx-auto rounded-full flex items-center justify-center transition-all duration-300
-            ${isDragOver ? 'bg-blue-600 scale-110' : 'bg-gradient-to-br from-blue-500 to-indigo-500'}
+            ${isDragOver ? 'bg-green-600 scale-110' : 'bg-gradient-to-br from-green-500 to-emerald-500'}
           `}>
             <Upload className="w-10 h-10 text-white" />
           </div>
           
           <div className="space-y-2">
             <h3 className="text-2xl font-bold text-gray-800">
-              Envie uma Imagem para Análise
+              Envie uma Foto do seu Prato
             </h3>
             <p className="text-gray-600">
-              Arraste e solte uma foto ou clique para selecionar
+              Arraste e solte uma foto da refeição ou clique para selecionar
             </p>
           </div>
 
           <div className="flex justify-center gap-4">
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <Camera className="w-4 h-4" />
-              <span>Foto atual</span>
+              <span>Foto do prato</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <ImageIcon className="w-4 h-4" />
@@ -107,7 +107,7 @@ const ImageUpload = ({ onImageUpload }: ImageUploadProps) => {
 
           <Button 
             variant="outline" 
-            className="mt-4 border-blue-200 text-blue-600 hover:bg-blue-50"
+            className="mt-4 border-green-200 text-green-600 hover:bg-green-50"
           >
             Selecionar Arquivo
           </Button>

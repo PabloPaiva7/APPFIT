@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Upload, Camera, Star, TrendingUp, Eye, Zap } from 'lucide-react';
+import { Upload, Camera, Leaf, TrendingUp, Eye, Utensils } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
@@ -12,9 +12,9 @@ import ResultsDisplay from '@/components/ResultsDisplay';
 const Index = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [evaluation, setEvaluation] = useState({
-    muscleDefinition: 0,
-    posture: 0,
-    bodyFat: 0,
+    vegetables: 0,
+    proteins: 0,
+    healthiness: 0,
     analysis: '',
     tip: ''
   });
@@ -26,22 +26,22 @@ const Index = () => {
   };
 
   const handleEvaluationSubmit = () => {
-    if (evaluation.muscleDefinition && evaluation.posture && evaluation.bodyFat && evaluation.analysis) {
+    if (evaluation.vegetables && evaluation.proteins && evaluation.healthiness && evaluation.analysis) {
       setShowResults(true);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-blue-100 sticky top-0 z-50">
+      <header className="bg-white/80 backdrop-blur-sm border-b border-green-100 sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
-              <TrendingUp className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl flex items-center justify-center">
+              <Utensils className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Avaliador Corporal
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+              Nutricionista IA
             </h1>
           </div>
         </div>
@@ -51,10 +51,10 @@ const Index = () => {
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-800 mb-4">
-            Análise Visual <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Profissional</span>
+            Análise Nutricional <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Inteligente</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Avalie a evolução corporal com análise detalhada de definição muscular, postura e composição corporal
+            Envie uma foto do seu prato e receba uma avaliação nutricional completa com classificação de saúde e estimativa de calorias
           </p>
         </div>
 
@@ -67,23 +67,23 @@ const Index = () => {
               <Card className="p-6 bg-white/70 backdrop-blur-sm border-0 shadow-xl">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 mb-4">
-                    <Camera className="w-5 h-5 text-blue-600" />
-                    <h3 className="text-lg font-semibold text-gray-800">Imagem para Análise</h3>
+                    <Camera className="w-5 h-5 text-green-600" />
+                    <h3 className="text-lg font-semibold text-gray-800">Prato para Análise</h3>
                   </div>
                   <div className="relative rounded-xl overflow-hidden">
                     <img 
                       src={uploadedImage} 
-                      alt="Imagem para avaliação"
+                      alt="Prato para avaliação nutricional"
                       className="w-full h-auto max-h-96 object-cover"
                     />
                   </div>
                   <Button 
                     variant="outline" 
                     onClick={() => setUploadedImage(null)}
-                    className="w-full border-blue-200 text-blue-600 hover:bg-blue-50"
+                    className="w-full border-green-200 text-green-600 hover:bg-green-50"
                   >
                     <Upload className="w-4 h-4 mr-2" />
-                    Enviar Nova Imagem
+                    Enviar Nova Foto
                   </Button>
                 </div>
               </Card>
@@ -92,69 +92,69 @@ const Index = () => {
               <Card className="p-6 bg-white/70 backdrop-blur-sm border-0 shadow-xl">
                 <div className="space-y-6">
                   <div className="flex items-center gap-3 mb-6">
-                    <Eye className="w-5 h-5 text-indigo-600" />
-                    <h3 className="text-lg font-semibold text-gray-800">Avaliação Visual</h3>
+                    <Eye className="w-5 h-5 text-emerald-600" />
+                    <h3 className="text-lg font-semibold text-gray-800">Avaliação Nutricional</h3>
                   </div>
 
                   <EvaluationCard
-                    title="Definição Muscular"
-                    description="Clareza e separação dos grupos musculares"
-                    value={evaluation.muscleDefinition}
-                    onChange={(value) => setEvaluation(prev => ({ ...prev, muscleDefinition: value }))}
+                    title="Presença de Vegetais"
+                    description="Quantidade e variedade de vegetais no prato"
+                    value={evaluation.vegetables}
+                    onChange={(value) => setEvaluation(prev => ({ ...prev, vegetables: value }))}
+                    icon={<Leaf className="w-5 h-5" />}
+                    color="green"
+                  />
+
+                  <EvaluationCard
+                    title="Qualidade das Proteínas"
+                    description="Presença e preparo das proteínas"
+                    value={evaluation.proteins}
+                    onChange={(value) => setEvaluation(prev => ({ ...prev, proteins: value }))}
                     icon={<TrendingUp className="w-5 h-5" />}
                     color="blue"
                   />
 
                   <EvaluationCard
-                    title="Postura"
-                    description="Alinhamento corporal e posicionamento"
-                    value={evaluation.posture}
-                    onChange={(value) => setEvaluation(prev => ({ ...prev, posture: value }))}
-                    icon={<Star className="w-5 h-5" />}
-                    color="indigo"
-                  />
-
-                  <EvaluationCard
-                    title="Gordura Corporal Aparente"
-                    description="Nível visual de adiposidade corporal"
-                    value={evaluation.bodyFat}
-                    onChange={(value) => setEvaluation(prev => ({ ...prev, bodyFat: value }))}
-                    icon={<Zap className="w-5 h-5" />}
-                    color="purple"
+                    title="Nível de Saudabilidade"
+                    description="Avaliação geral do prato (frituras, processados)"
+                    value={evaluation.healthiness}
+                    onChange={(value) => setEvaluation(prev => ({ ...prev, healthiness: value }))}
+                    icon={<Utensils className="w-5 h-5" />}
+                    color="emerald"
                   />
 
                   <div className="space-y-3">
                     <Label htmlFor="analysis" className="text-sm font-medium text-gray-700">
-                      Análise Detalhada
+                      Análise Detalhada do Prato
                     </Label>
                     <Textarea
                       id="analysis"
-                      placeholder="Descreva visualmente a definição muscular, gordura corporal aparente e postura observadas..."
+                      placeholder="Descreva os alimentos presentes, métodos de preparo, quantidade e composição nutricional observada..."
                       value={evaluation.analysis}
                       onChange={(e) => setEvaluation(prev => ({ ...prev, analysis: e.target.value }))}
-                      className="min-h-24 border-gray-200 focus:border-blue-400 focus:ring-blue-400"
+                      className="min-h-24 border-gray-200 focus:border-green-400 focus:ring-green-400"
                     />
                   </div>
 
                   <div className="space-y-3">
                     <Label htmlFor="tip" className="text-sm font-medium text-gray-700">
-                      Dica para Próxima Semana
+                      Dica de Melhoria
                     </Label>
                     <Textarea
                       id="tip"
-                      placeholder="Sugestão específica para evolução na próxima semana..."
+                      placeholder="Sugestão para tornar a refeição mais saudável..."
                       value={evaluation.tip}
                       onChange={(e) => setEvaluation(prev => ({ ...prev, tip: e.target.value }))}
-                      className="min-h-20 border-gray-200 focus:border-blue-400 focus:ring-blue-400"
+                      className="min-h-20 border-gray-200 focus:border-green-400 focus:ring-green-400"
                     />
                   </div>
 
                   <Button 
                     onClick={handleEvaluationSubmit}
-                    className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-3"
-                    disabled={!evaluation.muscleDefinition || !evaluation.posture || !evaluation.bodyFat || !evaluation.analysis}
+                    className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-medium py-3"
+                    disabled={!evaluation.vegetables || !evaluation.proteins || !evaluation.healthiness || !evaluation.analysis}
                   >
-                    Gerar Avaliação Completa
+                    Gerar Análise Nutricional
                   </Button>
                 </div>
               </Card>

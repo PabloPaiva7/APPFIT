@@ -9,7 +9,7 @@ interface EvaluationCardProps {
   value: number;
   onChange: (value: number) => void;
   icon: React.ReactNode;
-  color: 'blue' | 'indigo' | 'purple';
+  color: 'blue' | 'green' | 'emerald';
 }
 
 const EvaluationCard = ({ title, description, value, onChange, icon, color }: EvaluationCardProps) => {
@@ -20,17 +20,17 @@ const EvaluationCard = ({ title, description, value, onChange, icon, color }: Ev
       border: 'border-blue-200',
       slider: 'data-[state=active]:bg-blue-600'
     },
-    indigo: {
-      bg: 'bg-indigo-50',
-      text: 'text-indigo-600',
-      border: 'border-indigo-200',
-      slider: 'data-[state=active]:bg-indigo-600'
+    green: {
+      bg: 'bg-green-50',
+      text: 'text-green-600',
+      border: 'border-green-200',
+      slider: 'data-[state=active]:bg-green-600'
     },
-    purple: {
-      bg: 'bg-purple-50',
-      text: 'text-purple-600',
-      border: 'border-purple-200',
-      slider: 'data-[state=active]:bg-purple-600'
+    emerald: {
+      bg: 'bg-emerald-50',
+      text: 'text-emerald-600',
+      border: 'border-emerald-200',
+      slider: 'data-[state=active]:bg-emerald-600'
     }
   };
 
