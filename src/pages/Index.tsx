@@ -1,14 +1,15 @@
 
 import { useState } from 'react';
-import { Utensils, Users, Dumbbell, Heart, Target, TrendingUp, Calendar, Camera } from 'lucide-react';
+import { Utensils, Users, Dumbbell, Heart, Target, TrendingUp, Calendar, Camera, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import NutritionModule from '@/components/modules/NutritionModule';
 import BodyAssessmentModule from '@/components/modules/BodyAssessmentModule';
 import WorkoutModule from '@/components/modules/WorkoutModule';
 import ProgressModule from '@/components/modules/ProgressModule';
+import HabitsModule from '@/components/modules/HabitsModule';
 
-type ModuleType = 'home' | 'nutrition' | 'body-assessment' | 'workout' | 'progress';
+type ModuleType = 'home' | 'nutrition' | 'body-assessment' | 'workout' | 'progress' | 'habits';
 
 const Index = () => {
   const [activeModule, setActiveModule] = useState<ModuleType>('home');
@@ -39,6 +40,14 @@ const Index = () => {
       bgColor: 'from-purple-50 to-violet-50'
     },
     {
+      id: 'habits' as ModuleType,
+      title: 'Hábitos Saudáveis',
+      description: 'Planos holísticos para sono, foco, estresse e bem-estar',
+      icon: <Sparkles className="w-8 h-8" />,
+      color: 'from-pink-500 to-rose-500',
+      bgColor: 'from-pink-50 to-rose-50'
+    },
+    {
       id: 'progress' as ModuleType,
       title: 'Acompanhamento',
       description: 'Monitoramento de progresso e métricas fitness',
@@ -56,6 +65,8 @@ const Index = () => {
         return <BodyAssessmentModule onBack={() => setActiveModule('home')} />;
       case 'workout':
         return <WorkoutModule onBack={() => setActiveModule('home')} />;
+      case 'habits':
+        return <HabitsModule onBack={() => setActiveModule('home')} />;
       case 'progress':
         return <ProgressModule onBack={() => setActiveModule('home')} />;
       default:
