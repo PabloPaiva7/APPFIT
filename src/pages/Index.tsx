@@ -5,10 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import NutritionModule from '@/components/modules/NutritionModule';
 import BodyAssessmentModule from '@/components/modules/BodyAssessmentModule';
-import WorkoutModule from '@/components/modules/WorkoutModule';
+import { WorkoutModule } from '@/components/modules/WorkoutModule';
 import ProgressModule from '@/components/modules/ProgressModule';
-import HabitsModule from '@/components/modules/HabitsModule';
-import StretchingModule from '@/components/modules/StretchingModule';
+import { HabitsModule } from '@/components/modules/HabitsModule';
+import { StretchingModule } from '@/components/modules/StretchingModule';
 
 type ModuleType = 'home' | 'nutrition' | 'body-assessment' | 'workout' | 'progress' | 'habits' | 'stretching';
 
@@ -73,11 +73,11 @@ const Index = () => {
       case 'body-assessment':
         return <BodyAssessmentModule onBack={() => setActiveModule('home')} />;
       case 'workout':
-        return <WorkoutModule onBack={() => setActiveModule('home')} />;
+        return <WorkoutModule />;
       case 'stretching':
-        return <StretchingModule onBack={() => setActiveModule('home')} />;
+        return <StretchingModule />;
       case 'habits':
-        return <HabitsModule onBack={() => setActiveModule('home')} />;
+        return <HabitsModule />;
       case 'progress':
         return <ProgressModule onBack={() => setActiveModule('home')} />;
       default:
