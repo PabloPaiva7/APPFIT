@@ -3,8 +3,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { Play, Pause, RotateCcw, Clock, MessageCircle, Sparkles } from "lucide-react";
+import { Play, Pause, RotateCcw, Clock, MessageCircle, Sparkles, Eye } from "lucide-react";
 import { useGroqAI } from "@/hooks/useGroqAI";
+import { ImageGenerationCard } from "@/components/ui/image-generation-card";
 import { toast } from "sonner";
 
 const painAreas = [
@@ -100,6 +101,7 @@ export const StretchingModule = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [painDescription, setPainDescription] = useState("");
   const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
+  const [showVisualGuides, setShowVisualGuides] = useState(false);
   const { generateResponse, loading } = useGroqAI();
 
   useEffect(() => {
@@ -154,13 +156,52 @@ export const StretchingModule = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <div className="text-2xl">🧘‍♀️</div>
-          Alongamentos & Alívio de Dores
+          Fisioterapeuta IA - Alongamentos & Alívio
         </CardTitle>
         <CardDescription>
-          Análise personalizada de dores e exercícios de alívio guiados por IA
+          Análise personalizada de dores com demonstrações visuais e exercícios guiados por IA
         </CardDescription>
+        <Button
+          onClick={() => setShowVisualGuides(!showVisualGuides)}
+          variant="outline"
+          className="w-fit"
+        >
+          <Eye className="w-4 h-4 mr-2" />
+          {showVisualGuides ? 'Ocultar' : 'Mostrar'} Demonstrações Visuais
+        </Button>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Visual Demonstrations */}
+        {showVisualGuides && (
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
+            <ImageGenerationCard
+              prompt="Pessoa fazendo alongamento para pescoço, rotação cervical, demonstração clara da postura correta, estilo médico educativo, fundo neutro"
+              title="🤕 Alongamento Cervical"
+              description="Como executar mobilidade do pescoço corretamente"
+              style="medical"
+              autoGenerate={true}
+            />
+            <ImageGenerationCard
+              prompt="Demonstração do exercício gato-vaca para alongar as costas, posição quadrupede, movimento correto, estilo fisioterapêutico"
+              title="🦴 Exercício Gato-Vaca"
+              description="Alongamento para dores lombares"
+              style="medical"
+            />
+            <ImageGenerationCard
+              prompt="Pessoa fazendo rotação de ombros, movimento circular completo, demonstração da postura correta, estilo médico"
+              title="💪 Rotação de Ombros"
+              description="Alívio de tensão nos ombros"
+              style="medical"
+            />
+            <ImageGenerationCard
+              prompt="Exercícios de respiração profunda e relaxamento, pessoa em posição confortável, ambiente calmo, estilo wellness"
+              title="🌿 Técnicas de Respiração"
+              description="Exercícios para relaxamento e alívio do estresse"
+              style="medical"
+            />
+          </div>
+        )}
+
         {/* AI Pain Analysis */}
         <div className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-950/20 dark:to-red-950/20 p-4 rounded-lg border">
           <div className="flex items-center gap-2 mb-3">

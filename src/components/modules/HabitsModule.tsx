@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Heart, Target, Clock, Sparkles } from "lucide-react";
+import { Heart, Target, Clock, Sparkles, Brain, Eye } from "lucide-react";
 import { useGroqAI } from "@/hooks/useGroqAI";
+import { ImageGenerationCard } from "@/components/ui/image-generation-card";
 import { toast } from "sonner";
 
 export const HabitsModule = () => {
@@ -17,6 +18,7 @@ export const HabitsModule = () => {
     tempoDisponivel: ""
   });
   const [habitPlan, setHabitPlan] = useState<string | null>(null);
+  const [showVisualGuides, setShowVisualGuides] = useState(false);
   const { generateResponse, loading } = useGroqAI();
 
   const generateHabitPlan = async () => {
@@ -53,14 +55,53 @@ O plano deve ter 3-5 hábitos simples, linguagem motivadora, metas diárias espe
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Heart className="h-6 w-6" />
-          Hábitos Saudáveis
+          <Brain className="h-6 w-6" />
+          Psicólogo IA - Hábitos Saudáveis
         </CardTitle>
         <CardDescription>
-          Crie um plano personalizado de hábitos saudáveis para melhorar seu bem-estar
+          Crie um plano personalizado de hábitos saudáveis com demonstrações visuais para melhorar seu bem-estar
         </CardDescription>
+        <Button
+          onClick={() => setShowVisualGuides(!showVisualGuides)}
+          variant="outline"
+          className="w-fit"
+        >
+          <Eye className="w-4 h-4 mr-2" />
+          {showVisualGuides ? 'Ocultar' : 'Mostrar'} Guias Visuais
+        </Button>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Visual Guides */}
+        {showVisualGuides && (
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
+            <ImageGenerationCard
+              prompt="Pessoa meditando em ambiente tranquilo, postura correta, manhã ensolarada, estilo zen e mindfulness, alta qualidade"
+              title="🧘‍♀️ Meditação Matinal"
+              description="Como começar o dia com mindfulness"
+              style="professional"
+              autoGenerate={true}
+            />
+            <ImageGenerationCard
+              prompt="Rotina de sono saudável, quarto escuro e organizado, pessoa relaxada na cama, ambiente propício ao descanso"
+              title="😴 Higiene do Sono"
+              description="Criando o ambiente ideal para dormir"
+              style="professional"
+            />
+            <ImageGenerationCard
+              prompt="Pessoa bebendo água, hidratação saudável, garrafas de água, frutas frescas, estilo de vida wellness"
+              title="💧 Hidratação Adequada"
+              description="Hábitos de hidratação ao longo do dia"
+              style="professional"
+            />
+            <ImageGenerationCard
+              prompt="Exercícios de respiração e técnicas de mindfulness, pessoa calma em ambiente natural, bem-estar mental"
+              title="🌱 Técnicas de Relaxamento"
+              description="Gerenciamento de estresse e ansiedade"
+              style="professional"
+            />
+          </div>
+        )}
+
         {!habitPlan ? (
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

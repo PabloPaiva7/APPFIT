@@ -1,12 +1,15 @@
 
 import { useState } from 'react';
-import { ArrowLeft, Users, Camera, Eye, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Users, Camera, Eye, TrendingUp, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import ImageUpload from '@/components/ImageUpload';
 import EvaluationCard from '@/components/EvaluationCard';
+import { ImageGenerationCard } from '@/components/ui/image-generation-card';
+import { useGroqAI } from '@/hooks/useGroqAI';
+import { toast } from 'sonner';
 
 interface BodyAssessmentModuleProps {
   onBack: () => void;
@@ -22,6 +25,10 @@ const BodyAssessmentModule = ({ onBack }: BodyAssessmentModuleProps) => {
     weeklyTip: ''
   });
   const [showResults, setShowResults] = useState(false);
+  const [showVisualGuides, setShowVisualGuides] = useState(false);
+  const [bodyQuery, setBodyQuery] = useState('');
+  const [aiResponse, setAiResponse] = useState('');
+  const { generateResponse, loading } = useGroqAI();
 
   const handleImageUpload = (imageUrl: string) => {
     setUploadedImage(imageUrl);
@@ -31,6 +38,26 @@ const BodyAssessmentModule = ({ onBack }: BodyAssessmentModuleProps) => {
   const handleAssessmentSubmit = () => {
     if (assessment.muscleDefinition && assessment.posture && assessment.bodyFat && assessment.visualAnalysis) {
       setShowResults(true);
+    }
+  };
+
+  const askBodyExpert = async () => {
+    if (!bodyQuery.trim()) {
+      toast.error("Por favor, digite sua pergunta sobre avaliação corporal");
+      return;
+    }
+
+    const response = await generateResponse({
+      prompt: bodyQuery,
+      type: 'general',
+      context: 'Especialista em avaliação corporal, composição corporal, postura e desenvolvimento muscular'
+    });
+
+    if (response) {
+      setAiResponse(response.response);
+      toast.success("Consulta respondida pelo especialista!");
+    } else {
+      toast.error("Erro ao consultar o especialista");
     }
   };
 
@@ -50,26 +77,117 @@ const BodyAssessmentModule = ({ onBack }: BodyAssessmentModuleProps) => {
             <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center">
               <Users className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              Avaliação Corporal
-            </h1>
+            <div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                👨‍⚕️ Especialista em Avaliação Corporal
+              </h1>
+              <p className="text-sm text-slate-600">Análise detalhada com demonstrações visuais</p>
+            </div>
           </div>
         </div>
       </header>
 
       <main className="container mx-auto px-6 py-8">
         {/* Hero Section */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <h2 className="text-4xl font-bold text-gray-800 mb-4">
-            Análise <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Corporal Visual</span>
+            Especialista em <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Avaliação Corporal</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Envie uma foto para avaliação de definição muscular, postura e composição corporal com dicas personalizadas
+            Consulte um especialista virtual com demonstrações visuais e análise detalhada
           </p>
         </div>
 
-        <div className="max-w-6xl mx-auto">
-          {!uploadedImage ? (
+        <div className="max-w-6xl mx-auto space-y-8">
+          {/* Expert Consultation */}
+          <Card className="p-6 bg-gradient-to-br from-blue-50 to-cyan-50 border-0 shadow-lg">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-slate-800">💪 Consulta com Especialista</h3>
+                <p className="text-slate-600">Tire dúvidas sobre composição corporal, postura e desenvolvimento</p>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <Textarea
+                placeholder="Ex: Como melhorar minha postura? Qual a diferença entre massa magra e gordura corporal? Como avaliar meu progresso no treino?"
+                value={bodyQuery}
+                onChange={(e) => setBodyQuery(e.target.value)}
+                className="min-h-20"
+              />
+              <div className="flex gap-4">
+                <Button
+                  onClick={askBodyExpert}
+                  disabled={loading}
+                  className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600"
+                >
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  {loading ? 'Consultando...' : 'Consultar Especialista'}
+                </Button>
+                <Button
+                  onClick={() => setShowVisualGuides(!showVisualGuides)}
+                  variant="outline"
+                  className="border-blue-200 hover:bg-blue-50"
+                >
+                  <Eye className="w-4 h-4 mr-2" />
+                  {showVisualGuides ? 'Ocultar' : 'Mostrar'} Guias Visuais
+                </Button>
+              </div>
+            </div>
+
+            {aiResponse && (
+              <div className="mt-6 p-4 bg-white/70 rounded-lg border border-blue-200">
+                <h4 className="font-semibold text-slate-800 mb-2 flex items-center gap-2">
+                  <Users className="w-4 h-4" />
+                  Resposta do Especialista:
+                </h4>
+                <div className="whitespace-pre-wrap text-slate-700">{aiResponse}</div>
+              </div>
+            )}
+          </Card>
+
+          {/* Visual Guides */}
+          {showVisualGuides && (
+            <div className="grid md:grid-cols-2 gap-6">
+              <ImageGenerationCard
+                prompt="Diagrama de composição corporal mostrando massa magra versus gordura corporal, estilo médico educativo, alta qualidade"
+                title="📊 Composição Corporal"
+                description="Entenda a diferença entre massa magra e gordura"
+                style="medical"
+                autoGenerate={true}
+              />
+              <ImageGenerationCard
+                prompt="Demonstração de postura corporal correta e incorreta, alinhamento da coluna, vista lateral, estilo fisioterapêutico"
+                title="🦴 Análise Postural"
+                description="Como identificar problemas posturais"
+                style="medical"
+              />
+              <ImageGenerationCard
+                prompt="Pessoa fazendo medidas corporais com fita métrica, pontos de medição corretos, estilo profissional fitness"
+                title="📏 Medidas Corporais"
+                description="Pontos corretos para medir o progresso"
+                style="fitness"
+              />
+              <ImageGenerationCard
+                prompt="Progressão de desenvolvimento muscular ao longo do tempo, antes e depois, estilo fitness motivacional"
+                title="💪 Progressão Muscular"
+                description="Como acompanhar o desenvolvimento"
+                style="fitness"
+              />
+            </div>
+          )}
+
+          {/* Photo Analysis Section */}
+          <Card className="p-6 bg-white/70 backdrop-blur-sm border-0 shadow-lg">
+            <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+              <Camera className="w-5 h-5" />
+              📷 Análise Corporal por Foto
+            </h3>
+            <p className="text-slate-600 mb-6">Envie uma foto para avaliação detalhada de composição corporal</p>
+            {!uploadedImage ? (
             <div className="max-w-2xl mx-auto">
               <Card className="p-12 text-center bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-dashed border-blue-300 hover:border-blue-400 hover:bg-gradient-to-br hover:from-blue-50 hover:to-cyan-50 cursor-pointer transition-all duration-300"
                 onClick={() => document.getElementById('body-file-input')?.click()}
@@ -214,6 +332,7 @@ const BodyAssessmentModule = ({ onBack }: BodyAssessmentModuleProps) => {
               </Card>
             </div>
           )}
+          </Card>
 
           {showResults && (
             <div className="mt-8">
