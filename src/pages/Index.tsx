@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Utensils, Users, Dumbbell, Heart, Target, TrendingUp, Calendar, Camera, Sparkles, Zap } from 'lucide-react';
+import { Utensils, Users, Dumbbell, Heart, Target, TrendingUp, Calendar, Camera, Sparkles, Zap, Timer } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import NutritionModule from '@/components/modules/NutritionModule';
@@ -9,8 +9,9 @@ import { WorkoutModule } from '@/components/modules/WorkoutModule';
 import ProgressModule from '@/components/modules/ProgressModule';
 import { HabitsModule } from '@/components/modules/HabitsModule';
 import { StretchingModule } from '@/components/modules/StretchingModule';
+import PersonalTrainerAgent from '@/components/modules/PersonalTrainerAgent';
 
-type ModuleType = 'home' | 'nutrition' | 'body-assessment' | 'workout' | 'progress' | 'habits' | 'stretching';
+type ModuleType = 'home' | 'nutrition' | 'body-assessment' | 'workout' | 'progress' | 'habits' | 'stretching' | 'personal-trainer';
 
 const Index = () => {
   const [activeModule, setActiveModule] = useState<ModuleType>('home');
@@ -57,6 +58,14 @@ const Index = () => {
       bgColor: 'from-pink-50 to-rose-50'
     },
     {
+      id: 'personal-trainer' as ModuleType,
+      title: 'Personal Trainer IA',
+      description: 'Treinos guiados com cronômetro, imagens e feedback em tempo real',
+      icon: <Timer className="w-8 h-8" />,
+      color: 'from-red-500 to-pink-500',
+      bgColor: 'from-red-50 to-pink-50'
+    },
+    {
       id: 'progress' as ModuleType,
       title: 'Acompanhamento',
       description: 'Monitoramento de progresso e métricas fitness',
@@ -78,6 +87,8 @@ const Index = () => {
         return <StretchingModule />;
       case 'habits':
         return <HabitsModule />;
+      case 'personal-trainer':
+        return <PersonalTrainerAgent />;
       case 'progress':
         return <ProgressModule onBack={() => setActiveModule('home')} />;
       default:
