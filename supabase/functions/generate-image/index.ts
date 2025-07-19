@@ -41,7 +41,6 @@ serve(async (req) => {
         n: 1,
         size: size,
         quality: 'high',
-        style: style === 'medical' ? 'natural' : 'vivid',
         output_format: 'webp',
         background: 'auto'
       }),
