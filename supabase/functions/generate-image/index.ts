@@ -51,13 +51,12 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-image-1',
+        model: 'dall-e-3',
         prompt: prompt,
         n: 1,
         size: size,
-        quality: 'high',
-        output_format: 'webp',
-        background: 'auto'
+        quality: 'hd',
+        response_format: 'b64_json'
       }),
     });
 
@@ -86,7 +85,7 @@ serve(async (req) => {
 
     return new Response(
       JSON.stringify({ 
-        imageUrl: `data:image/webp;base64,${imageData.b64_json}`,
+        imageUrl: `data:image/png;base64,${imageData.b64_json}`,
         success: true
       }),
       {
