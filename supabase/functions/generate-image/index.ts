@@ -15,6 +15,21 @@ serve(async (req) => {
   }
 
   try {
+    // Verificar se a chave da API está configurada
+    if (!openAIApiKey) {
+      console.error('OPENAI_API_KEY não está configurada');
+      return new Response(
+        JSON.stringify({ 
+          error: 'Chave da API OpenAI não configurada',
+          details: 'OPENAI_API_KEY não está definida nas variáveis de ambiente' 
+        }),
+        { 
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
     const { prompt, style = 'professional', size = '1024x1024' } = await req.json();
 
     if (!prompt) {
@@ -47,9 +62,19 @@ serve(async (req) => {
     });
 
     if (!response.ok) {
-      const error = await response.text();
-      console.error('OpenAI API Error:', error);
-      throw new Error(`OpenAI API Error: ${response.status} ${error}`);
+      const errorText = await response.text();
+      console.error('OpenAI API Error Status:', response.status);
+      console.error('OpenAI API Error Response:', errorText);
+      
+      let errorMessage = `OpenAI API Error: ${response.status}`;
+      try {
+        const errorData = JSON.parse(errorText);
+        errorMessage += ` - ${errorData.error?.message || errorText}`;
+      } catch {
+        errorMessage += ` - ${errorText}`;
+      }
+      
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();

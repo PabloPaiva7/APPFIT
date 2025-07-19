@@ -28,11 +28,15 @@ export const useImageGeneration = () => {
         body: { prompt, style, size }
       });
 
+      console.log('Function response:', { data, functionError });
+
       if (functionError) {
+        console.error('Function error details:', functionError);
         throw new Error(functionError.message);
       }
 
-      if (data.error) {
+      if (data?.error) {
+        console.error('Data error details:', data);
         throw new Error(data.details || data.error);
       }
 
