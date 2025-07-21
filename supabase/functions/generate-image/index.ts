@@ -110,7 +110,15 @@ serve(async (req) => {
   try {
     const { prompt, style = 'professional', size = '1024x1024', provider = 'auto', model } = await req.json();
 
+    console.log('Starting image generation process...');
+    console.log('Provider:', provider, 'Model:', model);
+    console.log('API Keys available:', {
+      openAI: !!openAIApiKey,
+      huggingFace: !!huggingFaceApiKey
+    });
+
     if (!prompt) {
+      console.log('ERROR: No prompt provided');
       return new Response(
         JSON.stringify({ error: 'Prompt é obrigatório' }),
         { 
