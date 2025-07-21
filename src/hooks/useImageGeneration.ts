@@ -6,6 +6,8 @@ export interface GenerateImageParams {
   prompt: string;
   style?: 'professional' | 'medical' | 'fitness' | 'nutrition';
   size?: '1024x1024' | '1536x1024' | '1024x1536';
+  provider?: 'auto' | 'huggingface' | 'openai';
+  model?: 'stable-diffusion-2-1' | 'stable-diffusion-xl' | 'flux-schnell' | 'flux-dev' | 'playground-v2' | 'dreamshaper' | 'realistic-vision';
 }
 
 export interface GeneratedImage {
@@ -17,15 +19,15 @@ export const useImageGeneration = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const generateImage = async ({ prompt, style = 'professional', size = '1024x1024' }: GenerateImageParams): Promise<string | null> => {
+  const generateImage = async ({ prompt, style = 'professional', size = '1024x1024', provider = 'auto', model }: GenerateImageParams): Promise<string | null> => {
     setLoading(true);
     setError(null);
 
     try {
-      console.log('Generating image with prompt:', prompt);
+      console.log('Generating image with prompt:', prompt, 'provider:', provider, 'model:', model);
       
       const { data, error: functionError } = await supabase.functions.invoke('generate-image', {
-        body: { prompt, style, size }
+        body: { prompt, style, size, provider, model }
       });
 
       console.log('Function response:', { data, functionError });
