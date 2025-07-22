@@ -15,7 +15,14 @@ serve(async (req) => {
   }
 
   try {
+    console.log('Groq API Key available:', !!groqApiKey);
+    if (!groqApiKey) {
+      console.error('GROQ_API_KEY environment variable not found');
+      throw new Error('GROQ_API_KEY não configurada');
+    }
+    
     const { prompt, context, type } = await req.json();
+    console.log('Request received:', { type, hasPrompt: !!prompt, hasContext: !!context });
 
     let systemPrompt = "";
     
