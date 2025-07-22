@@ -1,7 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const groqApiKey = Deno.env.get('GROQ_API_KEY');
+const huggingFaceApiKey = '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';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -15,10 +15,10 @@ serve(async (req) => {
   }
 
   try {
-    console.log('Groq API Key available:', !!groqApiKey);
-    if (!groqApiKey) {
-      console.error('GROQ_API_KEY environment variable not found');
-      throw new Error('GROQ_API_KEY não configurada');
+    console.log('Hugging Face API Key available:', !!huggingFaceApiKey);
+    if (!huggingFaceApiKey) {
+      console.error('Hugging Face API key not found');
+      throw new Error('Hugging Face API key não configurada');
     }
     
     const { prompt, context, type } = await req.json();
@@ -46,32 +46,41 @@ serve(async (req) => {
         systemPrompt = `Você é uma equipe completa de profissionais da saúde e bem-estar (personal trainer, fisioterapeuta, nutricionista, psicólogo esportivo). Forneça orientações holísticas e personalizadas.`;
     }
 
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const response = await fetch('https://api-inference.huggingface.co/models/meta-llama/Llama-2-70b-chat-hf', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${groqApiKey}`,
+        'Authorization': `Bearer ${huggingFaceApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama-3.1-70b-versatile',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: `${context ? `Contexto: ${context}\n\n` : ''}${prompt}` }
-        ],
-        temperature: 0.7,
-        max_tokens: 2000,
-        stream: false
+        inputs: `<s>[INST] <<SYS>>\n${systemPrompt}\n<</SYS>>\n\n${context ? `Contexto: ${context}\n\n` : ''}${prompt} [/INST]`,
+        parameters: {
+          max_new_tokens: 2000,
+          temperature: 0.7,
+          top_p: 0.9,
+          do_sample: true,
+          return_full_text: false
+        }
       }),
     });
 
     if (!response.ok) {
       const error = await response.text();
-      console.error('Groq API Error:', error);
-      throw new Error(`Groq API Error: ${response.status} ${error}`);
+      console.error('Hugging Face API Error:', error);
+      throw new Error(`Hugging Face API Error: ${response.status} ${error}`);
     }
 
     const data = await response.json();
-    const aiResponse = data.choices[0].message.content;
+    console.log('Hugging Face response:', data);
+    
+    let aiResponse: string;
+    if (Array.isArray(data) && data[0]?.generated_text) {
+      aiResponse = data[0].generated_text;
+    } else if (data.generated_text) {
+      aiResponse = data.generated_text;
+    } else {
+      throw new Error('Formato de resposta inesperado da API');
+    }
 
     return new Response(JSON.stringify({ 
       response: aiResponse,
